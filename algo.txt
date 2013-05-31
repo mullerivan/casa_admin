@@ -1,0 +1,23 @@
+divido en grupos:
+pagaron = personas.colect do |persona|
+                each >= cantidad_por_persona
+          end
+
+no_pagaron = personas.colect do |persona|
+                each < cantidad_por_persona
+          end
+
+
+no_pagaron?
+    por persona en pagaron:
+        te_deben = pusiste - cantidad_por_persona
+        mientras te_deben > 0:
+            
+                p = no_pagaron.next
+                p.pago?
+                    debe = cantidad_por_persona - p.puso
+                sino
+                    debe = cantidad_por_persona
+                deuda.new(persona,p,idgasto,debe)
+                te_deben -= debe
+
