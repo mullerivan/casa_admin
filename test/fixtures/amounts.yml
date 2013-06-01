@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  canitdad: 1
-  persona: 
+  person: 
   food: 
+  amount: 9.99
 
 two:
-  canitdad: 1
-  persona: 
+  person: 
   food: 
+  amount: 9.99

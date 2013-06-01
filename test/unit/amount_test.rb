@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CuantoTest < ActiveSupport::TestCase
+class AmountTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
