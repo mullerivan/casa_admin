@@ -18,34 +18,31 @@ class Food < ActiveRecord::Base
   end
   def close
     partial = total / amounts.count
-    paid = amounts.detect do |each|
-      each.amount >= partial
-    end
-    not_paid_all  = amounts.detect do |each|
-      each.amount < partial
-    end
-
-    paid.each do |p|
-        p.amount=-partial
-        while p.amount > 0
-            np = not_paid_all.pop
+    paid_group = amounts.where('amount >= ?',partial)
+    not_paid_all_group  = amounts.where('amount < ?',partial)
+    paid_group.each do |amount|
+        owed = amount.amount - partial
+        while owed > 0 do
+            not_paid_all = not_paid_all_group.pop
+            owes = partial - not_paid_all.amount
             debt = Debt.new
-            debt.debtor = np.person
-            debt.creditor = p.person
-            #si es menor que  lo que me deven
-            if ((partial - np.amount) < p.amount)
-                debt.quantity = partal - np.amount
-                p.amount=-partal - np.amount
+            debt.debtor = not_paid_all.person
+            debt.creditor = amount.person
+            debt.food = self
+            #si es menor que  lo que me deben
+            if (owes < owed)
+                debt.quantity = owes
+                owed =- owes
             #deben mas plata de lo que me tienen que pagar
             else
-                debt.quantity = p.amount
-                np.amount =+ p.amout
-                p.amount = 0 
-                not_paid_all.push np unless np.amount == partial
+                debt.quantity = owed
+                owed =- owes
+                not_paid_all.amount =- owed
+                not_paid_all.push unless not_paid_all.amount == partial
             end
-            debt.food = self
             debt.save
         end
     end
   end
 end
+

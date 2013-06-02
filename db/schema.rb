@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130601040040) do
+ActiveRecord::Schema.define(:version => 20130601175101) do
 
   create_table "amounts", :force => true do |t|
     t.integer  "person_id"
@@ -20,6 +20,20 @@ ActiveRecord::Schema.define(:version => 20130601040040) do
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
+
+  create_table "debts", :force => true do |t|
+    t.string   "name"
+    t.integer  "debtor_id"
+    t.integer  "creditor_id"
+    t.integer  "food_id"
+    t.decimal  "quantity",    :precision => 10, :scale => 0
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+  end
+
+  add_index "debts", ["creditor_id"], :name => "index_debts_on_creditor_id"
+  add_index "debts", ["debtor_id"], :name => "index_debts_on_debtor_id"
+  add_index "debts", ["food_id"], :name => "index_debts_on_food_id"
 
   create_table "foods", :force => true do |t|
     t.string   "name"
