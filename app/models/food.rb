@@ -32,13 +32,13 @@ class Food < ActiveRecord::Base
             #si es menor que  lo que me deben
             if (owes < owed)
                 debt.quantity = owes
-                owed =- owes
+                owed -= owes
             #deben mas plata de lo que me tienen que pagar
             else
                 debt.quantity = owed
-                owed =- owes
-                not_paid_all.amount =- owed
-                not_paid_all.push unless not_paid_all.amount == partial
+                not_paid_all.amount -= owed
+                owed = 0
+                not_paid_all_group.push(not_paid_all) unless not_paid_all.amount == partial
             end
             debt.save
         end
