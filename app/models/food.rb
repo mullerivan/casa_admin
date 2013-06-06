@@ -1,6 +1,7 @@
 class Food < ActiveRecord::Base
   attr_accessible :name
   has_many :amounts
+  has_many :debts
 
   def add_person(person, quantity)
       amount = Amount.new
@@ -16,13 +17,16 @@ class Food < ActiveRecord::Base
     end
     sum
   end
+  def partial
+	total / amounts.count
+  end
+
   def close
-    partial = total / amounts.count
-    paid_group = amounts.where('amount >= ?',partial)
+	paid_group = amounts.where('amount >= ?',partial)
     not_paid_all_group  = amounts.where('amount < ?',partial)
     paid_group.each do |amount|
         owed = amount.amount - partial
-        while owed > 0 do
+        while (owed > 1) and (!not_paid_all_group.empty?) do
             not_paid_all = not_paid_all_group.pop
             owes = partial - not_paid_all.amount
             debt = Debt.new
@@ -44,5 +48,13 @@ class Food < ActiveRecord::Base
         end
     end
   end
+
+  def reset_debts
+    debts.each do |debt|
+		debt.destroy
+	end
+	self.close
+  end
+
 end
 
